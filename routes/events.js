@@ -9,14 +9,25 @@ const {
   getEvents,
   updateEvent,
 } = require("../controllers/events");
-
+const { fieldsValidator } = require("../middlewares/fields-validator");
+const { isDate } = require("../helpers/isDate");
 const router = Router();
 
 router.use(jwtValidator);
 
 router.get("/", getEvents);
 
-router.post("/", createEvent);
+router.post(
+  "/",
+  [
+    check("title", "Title is required").not().isEmpty(),
+    check("start", "Initial date is required").custom(isDate),
+    check("end", "Final date is required").custom(isDate),
+    fieldsValidator,
+  ],
+
+  createEvent
+);
 
 router.put("/:id", updateEvent);
 
