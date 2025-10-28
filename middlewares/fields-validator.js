@@ -7,7 +7,7 @@ const fieldsValidator = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({
       ok: false,
-      errors: errors.mapped(),
+      msg: errors.array().map((err) => err.msg),
     });
   }
   next();
