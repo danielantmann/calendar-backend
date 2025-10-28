@@ -29,7 +29,16 @@ router.post(
   createEvent
 );
 
-router.put("/:id", updateEvent);
+router.put(
+  "/:id",
+  [
+    check("title", "Title is required").not().isEmpty(),
+    check("start", "Initial date is required").custom(isDate),
+    check("end", "Final date is required").custom(isDate),
+    fieldsValidator,
+  ],
+  updateEvent
+);
 
 router.delete("/:id", deleteEvent);
 
